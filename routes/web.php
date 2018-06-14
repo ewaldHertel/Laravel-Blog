@@ -11,21 +11,74 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Auth::routes();
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-//Auth::routes();
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
-Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-Route::post('register', 'Auth\LoginController@register')->name('register');
+Route::group(['middleware' => 'auth'], function () {
 
-Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('not-found', 'HomeController@notFound');
 
-Route::prefix('admin')->middleware('role:superadministrator|administrator|editor|author|contributor')->group(function () {
-  Route::get('/', 'AdminController@index');
-  Route::get('/dashboard', 'AdminController@dashboard')->name('admin.dashboard');
-  Route::resource('/users', 'UserController');
-  Route::resource('/permissions', 'PermissionController', ['except' => 'destroy']);
-  Route::resource('/roles', 'RoleController', ['except' => 'destroy']);
-  //Route::resource('/posts', 'PostController');
+    Route::get('/', [
+        'as'   => 'home',
+        'uses' => 'HomeController@index'
+    ]);
+    Route::get('my-tasks', [
+        'as'   => 'tasks',
+        'uses' => 'HomeController@tasks'
+    ]);
+    Route::get('my-tasks/{id}', [
+        'as'   => 'task',
+        'uses' => 'HomeController@task'
+    ]);
+    Route::post('my-tasks/{id}', [
+        'as'   => 'task.update',
+        'uses' => 'HomeController@taskSave'
+    ]);
+    Route::get('calendar-tasks', [
+        'as'   => 'home.calendar.tasks',
+        'uses' => 'HomeController@calendarTasks'
+    ]);
+		Route::get('403', function () {
+		return View::make('errors.403');
+	});
+
+	Route::get('404', function () {
+		return View::make('errors.404');
+	});
+
+
+    Route::resource('clients', 'ClientController',
+        ['only' => ['index', 'show']]);
+
+    Route::get('clients/login/{id}', [
+        'as'   => 'clients.login',
+        'uses' => 'ClientController@login'
+    ]);
+    Route::resource('tasks', 'TaskController');
+    Route::get('tasks/search/client', [
+        'as'   => 'tasks.find.client',
+        'uses' => 'TaskController@findClient'
+    ]);
+    Route::get('tasks/note/{id}', [
+        'as'   => 'tasks.note',
+        'uses' => 'TaskController@note'
+    ]);
+    Route::post('tasks/note/{id}', [
+        'as'   => 'tasks.note.save',
+        'uses' => 'TaskController@noteSave'
+    ]);
+	
+	Route::get('upload', [
+		'as' => 'upload', 
+		'uses' => 'ImageController@getUpload'
+	]);
+	Route::post('upload', ['as' => 'upload-post', 'uses' =>'ImageController@postUpload']);
+	Route::post('upload/delete', ['as' => 'upload-remove', 'uses' =>'ImageController@deleteUpload']);
+	Route::get('server-images', ['as' => 'server-images', 'uses' => 'ImageController@getServerImages']);
+	
+    Route::resource('users', 'UserController');
+	Route::resource('permissions', 'PermissionController', ['except' => 'destroy']);
+	Route::resource('roles', 'RoleController', ['except' => 'destroy']);
+    Route::resource('categories', 'CategoryController');
+
 });

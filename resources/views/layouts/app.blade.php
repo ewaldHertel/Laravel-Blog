@@ -8,73 +8,65 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title')</title>
+
+    <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/df6431e323547add1b4cf45992913f15286456d3/devicon.min.css">
+
+    <!--== font-awesome ==-->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!--== magnific-popup ==-->
+    <link href="{{ asset('css/magnific-popup.css') }}" rel="stylesheet">
+
+    <!--== owl carousel ==-->
+    <link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet">
+
+    <!--== animate css ==-->
+    <link href="{{ asset('css/animate.min.css') }}" rel="stylesheet">
+
+    @yield('style')
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" data-offset="51">
+    <div class="frontend" id="app">
 
         @yield('content')
     </div>
-
+    @include('partials._footer')
     <!-- Scripts -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/smartresize.js') }}"></script>
+    <script src="{{ asset('js/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('js/typed.js') }}"></script>
+    <script src="{{ asset('js/jquery.sticky.js') }}"></script>
+    <script src="{{ asset('js/validator.min.js') }}"></script>
+    <script src="{{ asset('js/plugins.js') }}"></script>
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyBU7FfEjCd_uulWTLyyP9sK0Td7sMrWHNo"></script>
+    <script src="{{ asset('js/jquery-parallax.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+    function init_map() {
+      // Koordinaten
+      var var_location = new google.maps.LatLng(51.031891, 7.848221);
+      // Einstellungen
+      var var_mapoptions = {
+        center: var_location,
+        zoom: 14
+      };
+      // Markierung
+      var var_marker = new google.maps.Marker({
+        position: var_location,
+        map: var_map,
+        title:"Ewald Hertel Fotografie"});
+      // Anzeige der Karte
+      var var_map = new google.maps.Map(document.getElementById("map-container"), var_mapoptions);
+      var_marker.setMap(var_map);
+    }
+    google.maps.event.addDomListener(window, 'load', init_map);
+    </script>
 </body>
 </html>

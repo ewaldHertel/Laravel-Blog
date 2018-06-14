@@ -1,19 +1,23 @@
-@extends('adminlte::master')
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@section('adminlte_css')
-    <link rel="stylesheet"
-          href="{{ asset('vendor/adminlte/dist/css/skins/skin-' . config('adminlte.skin', 'blue') . '.min.css')}} ">
-    @stack('css')
-    @yield('css')
-@stop
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('body_class', 'skin-' . config('adminlte.skin', 'blue') . ' sidebar-mini ' . (config('adminlte.layout') ? [
-    'boxed' => 'layout-boxed',
-    'fixed' => 'fixed',
-    'top-nav' => 'layout-top-nav'
-][config('adminlte.layout')] : '') . (config('adminlte.collapse_sidebar') ? ' sidebar-collapse ' : ''))
-
-@section('body')
+        <title>@yield('title')</title>
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/AdminLTE.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/dropzone.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/skins/skin-blue.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @yield('css')
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
         <!-- Main Header -->
@@ -23,10 +27,7 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            @if(config('adminlte.layout') == 'top-nav')
-            <div class="container">
-            @endif
-
+            @include('partials._session')
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 @yield('content_header')
@@ -39,19 +40,17 @@
 
             </section>
             <!-- /.content -->
-            @if(config('adminlte.layout') == 'top-nav')
-            </div>
-            <!-- /.container -->
-            @endif
         </div>
         <!-- /.content-wrapper -->
 
     </div>
-    <!-- ./wrapper -->
-@stop
-
-@section('adminlte_js')
-    <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
-    @stack('js')
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('js/dropzone.min.js') }}" ></script>
+    <script src="{{ asset('js/dropzone-modal.js') }}" ></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     @yield('js')
-@stop
+
+    </body>
+</html>
